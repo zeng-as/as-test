@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>存管网关</title>
+</head>
+<body>
+<!--
+            "reqData": "{'businessLicense':'10086','redirectUrl':'https://test-civet-api.niiwoo.com/lanmao/callback','bankLicense':'J5840168313915','requestNo':'172_21_0_122-8080-60000036302018050516023330','bankcardNo':'65432311111112','idCardType':'PRC_ID','creditCode':'G10440305168313913','platformUserNo':'75745859500904448','orgNo':'007','contact':'阿杜','legal':'杰伦','unifiedCode':'91440300MA5D8NEU89','authList':'COMPENSATORY','contactPhone':'15707351234','legalIdCardNo':'41142114921543314111','taxNo':'10087','userRole':'COLLABORATOR','enterpriseName':'鸿特机构','bankcode':'BOSH','timestamp':'20180505160233'}",
+            "platformNo": "6000003630",
+            "sign": "CCizgo98T75UcnMYnwznaPCUS/esFbTaGzG3FGR5NneYH/Z+lvUno8jrEbrpBNKWnS+11Zf8GUvgEEqoCnH8h47vZk6YrvV3NYdGzbbwUsUiVB+KWHl6T9MjETMmSEyVo2S3t4A+FxtUgKYebFnS1EF7tpTQIRWH3mk4cMbwHgE=",
+            "keySerial": 1,
+            "serviceName": "ENTERPRISE_REGISTER"
+-->
+
+    <form action="https://xwbk.lanmaoly.com/bha-neo-app/lanmaotech/gateway" method="post">
+        <table>
+            <tr>
+                <td>reqData:</td>
+                <td><input title="" type="text" name="reqData"></td>
+            </tr>
+            <tr>
+                <td>platformNo:</td>
+                <td><input title="" type="text" name="platformNo"></td>
+            </tr>
+            <tr>
+                <td>sign:</td>
+                <td><input title="" type="text" name="sign"></td>
+            </tr>
+            <tr>
+                <td>keySerial:</td>
+                <td><input title="" type="text" name="keySerial"></td>
+            </tr>
+            <tr>
+                <td>serviceName:</td>
+                <td><input title="" type="text" name="serviceName"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

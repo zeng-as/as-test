@@ -1,0 +1,3 @@
+server:
+  context-path: /test-web
+  port: 8888
