@@ -22,6 +22,8 @@ public class PoiUtil {
 
 
     public static void main(String[] args) throws IOException {
+        System.out.println("??");
+
         File file = new File("D:\\C盘搬家\\Desktop\\channel.xlsx");
         File sqlFile = new File("D:\\C盘搬家\\Desktop\\channel.sql");
         if (!sqlFile.exists()) {
