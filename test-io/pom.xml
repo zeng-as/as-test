@@ -29,10 +29,5 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.17</version>
         </dependency>
-        <dependency>
-            <groupId>com.niiwoo.tripod</groupId>
-            <artifactId>tripod-service</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

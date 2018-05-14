@@ -1,6 +1,5 @@
 package com.as.test.poi;
 
-import com.niiwoo.tripod.service.component.SnowflakeIdWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,8 +27,6 @@ public class PoiUtil {
             sqlFile.createNewFile();
         }
         FileWriter fw = new FileWriter(sqlFile);
-
-        SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker(1, 0);
 
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
         XSSFSheet sheet = workbook.getSheetAt(0);
