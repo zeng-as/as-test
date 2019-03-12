@@ -15,12 +15,10 @@ public class Client {
         int port = 55535;
         Socket socket = new Socket(host, port);
         OutputStream os = socket.getOutputStream();
-        os.write("i am client!\n".getBytes("UTF-8"));
+        os.write("i am client!".getBytes("UTF-8"));
         socket.shutdownOutput();
 
         InputStream is = socket.getInputStream();
-        System.out.println(is.getClass());
-        is.read();
         byte[] bytes = new byte[1024];
         int len;
         StringBuilder sb = new StringBuilder();

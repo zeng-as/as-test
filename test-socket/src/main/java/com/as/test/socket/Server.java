@@ -31,7 +31,7 @@ public class Server {
         System.out.println(sb);
 
         OutputStream os = socket.getOutputStream();
-        os.write("i am server".getBytes("UTF-8"));
+        os.write("i am server!".getBytes("UTF-8"));
 
         os.flush();
         os.close();
