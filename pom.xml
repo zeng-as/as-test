@@ -15,6 +15,10 @@
         <module>test-web</module>
         <module>test-websocket</module>
         <module>test-jpa</module>
+        <module>test-arithmetic</module>
+        <module>test-native</module>
+        <module>test-webservice</module>
+        <module>test-thread</module>
     </modules>
 
     <parent>
