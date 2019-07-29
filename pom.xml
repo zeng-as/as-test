@@ -19,6 +19,7 @@
         <module>test-native</module>
         <module>test-webservice</module>
         <module>test-thread</module>
+        <module>test-annotation</module>
     </modules>
 
     <parent>
