@@ -1,7 +1,5 @@
 package com.as.test.annotation;
 
-import org.springframework.stereotype.Component;
-
 import java.lang.annotation.*;
 
 /**

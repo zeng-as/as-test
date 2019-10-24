@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 
 /**
@@ -108,7 +107,7 @@ public class ImageAndQRcode {
      * @throws Exception
      */
     public static void addImageQRcode(String text, String sourceFilePath,
-                               String waterFilePath, String saveFilePath, String content) throws Exception {
+                                      String waterFilePath, String saveFilePath, String content) throws Exception {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
@@ -144,8 +143,8 @@ public class ImageAndQRcode {
 //        String content = "阿水";
 //        content = new String(content.getBytes("utf-8"), StandardCharsets.UTF_8);
 //        System.out.println(content);
-        String a = (1/ 100f) + "";
+        String a = (1 / 100f) + "";
         System.out.println(a);
-        System.out.println(1/100f);
+        System.out.println(1 / 100f);
     }
 }

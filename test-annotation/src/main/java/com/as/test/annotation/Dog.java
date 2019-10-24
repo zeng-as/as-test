@@ -1,7 +1,5 @@
 package com.as.test.annotation;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.lang.annotation.Annotation;
 
 /**
