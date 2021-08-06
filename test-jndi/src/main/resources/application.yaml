@@ -1,0 +1,10 @@
+server:
+  port: 8888
+
+spring:
+  datasource:
+    jndi-name: java:comp/env/jdbc/test
+
+mybatis:
+  mapper-locations: "classpath*:/mapper/**/*.xml"
+  type-aliases-package: com.as.test.jndi.dao.domain

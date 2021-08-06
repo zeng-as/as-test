@@ -7,11 +7,7 @@ import java.lang.annotation.Annotation;
  * author: as
  * date: 2019/7/29
  */
-@Animal(lag = 4)
+@Animal(lag = 4, name = "狗狗")
 public class Dog {
 
-    public static void main(String[] args) {
-        Annotation[]  as = Dog.class.getAnnotations();
-        System.out.println(as.length);
-    }
 }

@@ -22,6 +22,8 @@
         <module>test-annotation</module>
         <module>test-rabbitmq</module>
         <module>test-jdk</module>
+        <module>test-proxy</module>
+        <module>test-jndi</module>
     </modules>
 
     <build>

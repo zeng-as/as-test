@@ -24,7 +24,7 @@ public class JsonUtil {
         List<Book> books2 = new ArrayList<>();
         books2.add(new Book("语文", null));
         books.add(new Book("英语", books2));
-        Student s = new Student("asd", 123, "asdasd", "asd", books);
+        Student s = new Student("asd", 123, 18, "asdasd", "asd", books);
         m.put("student", s);
         System.out.println(JSONObject.toJSONString(m));
 

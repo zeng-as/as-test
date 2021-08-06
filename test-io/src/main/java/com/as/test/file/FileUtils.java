@@ -1,6 +1,7 @@
 package com.as.test.file;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -9,13 +10,13 @@ import java.util.Arrays;
  * @date 2018/12/23
  */
 public class FileUtils {
-    public static void main(String[] args) {
-        String path = "C:\\Users\\as\\Pictures\\upload\\qrcode";
-        File file = new File(path);
-        File[] fs = file.listFiles();
-        Arrays.stream(fs).forEach(f -> {
-            String[] s = f.list();
-            System.out.println(s[0].split("\\.")[0]);
-        });
+
+    public static void main(String[] args) throws IOException {
+        File file = new File("C:\\Users\\88452\\Desktop\\test\\test2\\a.txt");
+        if (!file.exists()) {
+            boolean rs = file.mkdirs();
+            System.out.println(rs);
+//            file.createNewFile();
+        }
     }
 }

@@ -13,6 +13,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Book {
-    private String BookName;
+    private String bookName;
     private List<Book> bks;
 }

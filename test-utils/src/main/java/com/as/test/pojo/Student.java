@@ -2,6 +2,7 @@ package com.as.test.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,10 +13,12 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Student {
-    private String Name;
-    private int Age;
-    private String IDCard;
-    private String PlanID;
-    private List<Book> BookList;
+    private String name;
+    private int age;
+    private Integer ageNew;
+    private String idCard;
+    private String planID;
+    private List<Book> bookList;
 }
