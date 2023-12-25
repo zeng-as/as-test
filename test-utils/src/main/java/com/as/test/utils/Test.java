@@ -28,26 +28,43 @@ public class Test {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        String tmp = "{\"name\": \"详细地址\",\"expression\": \"partyList{quoteRole:\\\"1\\\",partyType:\\\"1\\\"}.customerInfo.address\"}";
-        Map map = JSONObject.parseObject(tmp, Map.class);
-        System.out.println(map);
-        String a = map.get("expression").toString();
-        Pattern compile = Pattern.compile("(\\{.+)(})");
-        Matcher matcher = compile.matcher(a);
-        String s = "";
-        while(matcher.find()) {
-            s = matcher.group(0);
+//    public static void main(String[] args) throws Exception {
+//        String tmp = "{\"name\": \"详细地址\",\"expression\": \"partyList{quoteRole:\\\"1\\\",partyType:\\\"1\\\"}.customerInfo.address\"}";
+//        Map map = JSONObject.parseObject(tmp, Map.class);
+//        System.out.println(map);
+//        String a = map.get("expression").toString();
+//        Pattern compile = Pattern.compile("(\\{.+)(})");
+//        Matcher matcher = compile.matcher(a);
+//        String s = "";
+//        while(matcher.find()) {
+//            s = matcher.group(0);
+//        }
+//
+//        System.out.println(s);
+//        map = JSONObject.parseObject(s, Map.class);
+//        System.out.println(map);
+//
+////        Pattern compile2 = Pattern.compile("特定(?=类)");
+////        Matcher matcher2 = compile2.matcher(a);
+////        while(matcher2.find()) {
+////            System.out.println(matcher2.group(0));
+////        }
+//    }
+
+    public static void main(String[] args) {
+        int l = 12;
+        List<Integer> list = new ArrayList<>();
+        for (int i =0; i<12; i++) {
+            list.add(i);
         }
 
-        System.out.println(s);
-        map = JSONObject.parseObject(s, Map.class);
-        System.out.println(map);
+        for (int i = 0; i < list.size(); i++) {
+            if (i%2==0) {
+                list.remove(i);
+//                i--;
+            }
+        }
 
-//        Pattern compile2 = Pattern.compile("特定(?=类)");
-//        Matcher matcher2 = compile2.matcher(a);
-//        while(matcher2.find()) {
-//            System.out.println(matcher2.group(0));
-//        }
+        System.out.println(list);
     }
 }

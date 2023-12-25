@@ -1,13 +1,10 @@
 package com.as.test.socket;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
+import java.net.SocketTimeoutException;
+import java.util.Arrays;
 
 /**
  * Desc:
@@ -15,28 +12,44 @@ import java.nio.charset.Charset;
  */
 public class Server {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int port = 55535;
-        ServerSocket server = new ServerSocket(port);
-        System.out.println("socket服务器开启，ip,port");
-        Socket socket = server.accept();
-        InputStream is = socket.getInputStream();
-        byte[] bytes = new byte[1024];
-        int len;
-        StringBuilder sb = new StringBuilder();
-        while((len = is.read(bytes)) != -1) {
-            String a =  new String(bytes, 0, len, "UTF-8");
-            sb.append(a);
+        try (ServerSocket server = new ServerSocket(port, 1)) {
+            while (true) {
+                Socket accept = server.accept();
+//                accept.setSoTimeout(3000);
+                InputStream is = accept.getInputStream();
+                byte[] bs = new byte[1024];
+                int i;
+                try {
+                    while ((i = is.read(bs)) > 0) {
+                        byte[] bytes = Arrays.copyOfRange(bs, 0, i);
+                        String s = new String(bytes, "GBK");
+                        System.out.println(s + "|");
+
+                        byte[] bytes1 = s.getBytes();
+                        System.out.println(new String(bytes1));
+                    }
+                    //                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    //                String s;
+                    //                while (null != (s = (br.readLine()))) {
+                    //                    for (byte aByte : s.getBytes()) {
+                    //                        System.out.println(Integer.toHexString(aByte));
+                    //                    }
+                    //                    System.out.println(s);
+                    //                }
+                } catch (SocketTimeoutException e) {
+                    e.printStackTrace();
+                }
+
+                OutputStream os = accept.getOutputStream();
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+                bw.write("0");
+                bw.flush();
+                accept.shutdownOutput();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println(sb);
-
-        OutputStream os = socket.getOutputStream();
-        os.write("i am server!".getBytes("UTF-8"));
-
-        os.flush();
-        os.close();
-        is.close();
-        socket.close();
-        server.close();
     }
 }
