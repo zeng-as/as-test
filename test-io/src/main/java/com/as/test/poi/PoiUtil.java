@@ -1,56 +1,142 @@
 package com.as.test.poi;
 
-import org.apache.poi.common.usermodel.HyperlinkType;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import com.alibaba.fastjson2.annotation.JSONField;
+import lombok.Data;
+import org.apache.poi.openxml4j.opc.PackagePart;
+import org.apache.poi.poifs.filesystem.*;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.poi.xslf.usermodel.XSLFRelation.OLE_OBJECT;
 
 /**
- * Desc:
- * Create by scrawl on 2018/5/3
+ * pom信息
+ *         <dependency>
+ *             <groupId>org.apache.poi</groupId>
+ *             <artifactId>poi</artifactId>
+ *             <version>5.2.3</version>
+ *         </dependency>
+ *         <dependency>
+ *             <groupId>org.apache.poi</groupId>
+ *             <artifactId>poi-ooxml</artifactId>
+ *             <version>5.2.3</version>
+ *         </dependency>
+ *         <dependency>
+ *             <groupId>org.apache.poi</groupId>
+ *             <artifactId>poi-scratchpad</artifactId>
+ *             <version>5.2.3</version>
+ *         </dependency>
  */
 public class PoiUtil {
 
-    public static void readXls() {
-
+    @Data
+    public static class EmbeddedFile {
+        @JSONField(serialize = false)
+        private byte[] data;
+        private String fileName;
+        private String embedName;
+        private int sheet;
+        private int col1;
+        private int col2;
+        private int row1;
+        private int row2;
     }
 
+    public static Map<String, EmbeddedFile> readEmbeddedFiles(InputStream is) {
+        Map<String, EmbeddedFile> rs = new HashMap<>();
 
-    public static void main(String[] args) throws IOException, InvalidFormatException {
-        File file = new File("C:\\Users\\88452\\Desktop\\新建文件夹\\test.xlsx");
-        FileInputStream fis = new FileInputStream(file);
-        XSSFWorkbook workbook = new XSSFWorkbook(fis);
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        int rowNum = sheet.getLastRowNum();
-        for (int i=0; i<=rowNum; i++) {
-            XSSFRow row = sheet.getRow(i);
-            if (null == row) {
-                continue;
-            }
-            XSSFCell cell = row.getCell(1);
-            if (null == cell) {
-                continue;
-            }
-            cell.setCellValue("test"+i);
-            XSSFHyperlink hyperlink = cell.getHyperlink();
-            String s = hyperlink.getAddress().replaceAll("目录1/", "目录3/");
-            XSSFHyperlink l = workbook.getCreationHelper().createHyperlink(HyperlinkType.FILE);
-            l.setAddress(s);
-            cell.setHyperlink(l);
+        try (XSSFWorkbook sheets = new XSSFWorkbook(is)) {
+            int size = sheets.getNumberOfSheets();
 
-//            String s = hyperlink.getAddress().replaceAll("目录1/", "目录2/");
-//            hyperlink.setAddress(s);
-//            cell.setHyperlink(hyperlink);
+            for (int i = 0; i < size; i++) {
+                XSSFSheet sheet = sheets.getSheetAt(i);
+                Drawing<?> dp = sheet.getDrawingPatriarch();
+                if (null == dp) {
+                    continue;
+                }
+
+                for (Shape shape : dp) {
+                    if (!(shape instanceof ObjectData)) {
+                        continue;
+                    }
+
+                    ObjectData od = (ObjectData) shape;
+                    EmbeddedFile embeddedFile = new EmbeddedFile();
+                    rs.put(od.getFileName(), embeddedFile);
+
+                    embeddedFile.setEmbedName(od.getFileName());
+                    embeddedFile.setSheet(i);
+                    ChildAnchor chAnc = shape.getAnchor();
+                    if (chAnc instanceof ClientAnchor) {
+                        ClientAnchor anc = (ClientAnchor) chAnc;
+                        embeddedFile.setCol1(anc.getCol1());
+                        embeddedFile.setCol2(anc.getCol2());
+                        embeddedFile.setRow1(anc.getRow1());
+                        embeddedFile.setRow2(anc.getRow2());
+                    }
+                }
+            }
+
+            List<PackagePart> parts = sheets.getAllEmbeddedParts();
+            for (PackagePart embeddedPart : parts) {
+                String name = embeddedPart.getPartName().getName();
+                if (!rs.containsKey(name)) {
+                    continue;
+                }
+
+                EmbeddedFile embeddedFile = rs.get(name);
+                if (!OLE_OBJECT.getContentType().equals(embeddedPart.getContentType())) {
+                    continue;
+                }
+
+                POIFSFileSystem filesystem = new POIFSFileSystem(embeddedPart.getInputStream());
+                DirectoryNode rootNode = filesystem.getRoot();
+                for (Entry entry : rootNode) {
+                    if (!(entry instanceof DocumentEntry)) {
+                        continue;
+                    }
+
+                    DocumentEntry documentEntry = (DocumentEntry) entry;
+                    if (!documentEntry.getName().contains("Ole10Native")) {
+                        continue;
+                    }
+
+                    Ole10Native ole10Native = Ole10Native.createFromEmbeddedOleObject(rootNode);
+                    embeddedFile.setFileName(ole10Native.getLabel2());
+                    embeddedFile.setData(ole10Native.getDataBuffer());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 输出日志
         }
-        FileOutputStream fos = new FileOutputStream(file);
-        workbook.write(fos);
-        fos.close();
+        return rs;
     }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        String xlsName = "C:\\Users\\88452\\Desktop\\test.xlsx";
+        Map<String, EmbeddedFile> map = readEmbeddedFiles(new FileInputStream(xlsName));
+
+        String directPath = "C:\\Users\\88452\\Desktop\\temp\\";
+        map.forEach((s, embeddedFile) -> {
+            byte[] data = embeddedFile.getData();
+            if (null != data && data.length > 0) {
+                try (FileOutputStream fos = new FileOutputStream(directPath + embeddedFile.getFileName())) {
+                    fos.write(data);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 }
